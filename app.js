@@ -18,10 +18,15 @@ const removeNonMatching = (searchedStr, person) => {
 }
 
 const filter = (searchedStr) => {
-    const newList = data.filter(q => {
-        let newCountry = q
+    // Copy of initial data
+    let dataListCopy = JSON.parse(JSON.stringify(data)); 
+    // Filter on data list copy
+    const newList = dataListCopy.filter(q => {
+        let newCountry = q 
+        // Filter on people list 
         newCountry.people = q.people.filter(p => {
             let newPerson = p
+            // Remove animals of person that does not maching to searchedStr
             newPerson.animals = removeNonMatching(searchedStr, p)
 
             // The 'animals' entry will be removed if there is nothing left inside
@@ -46,7 +51,7 @@ const count = () => {
         country.name = `${country.name} [${country.people.length}]`
         return country
     })
-    console.log(JSON.stringify(newList))
+    //console.log(JSON.stringify(newList))
     return JSON.stringify(newList)
 }
 
