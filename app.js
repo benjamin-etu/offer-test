@@ -38,12 +38,19 @@ const filter = (searchedStr) => {
     });
 
     // prints out the filtered list if there is any match
-    console.log((!isEmpty(newList)) ? 'Nothing found' : JSON.stringify(newList))
     return (!isEmpty(newList)) ? 'Nothing found' : JSON.stringify(newList)
 }
 
-const count = () => {
-    const newList = data.map((country) => {
+/**
+ * Count the direct children of Country and People in data
+ * @param {string} data 
+ * @returns modified string with counts values
+ */
+const count = (data) => {
+    // Copy of initial data
+    let dataListCopy = JSON.parse(data); 
+
+    const newList = dataListCopy.map((country) => {
         country.people.map((person) => {
             person.name = `${person.name} [${person.animals.length}]`
             return person
@@ -51,7 +58,6 @@ const count = () => {
         country.name = `${country.name} [${country.people.length}]`
         return country
     })
-    //console.log(JSON.stringify(newList))
     return JSON.stringify(newList)
 }
 
@@ -60,10 +66,13 @@ const count = () => {
 
 try {
     const cmd = args[2].split("=");
+    let workingData = JSON.stringify(data);
     if (cmd[0] === '--filter' || cmd[0] === 'filter') {
-        filter(cmd[1])
+        workingData = filter(cmd[1]);
+        console.log(workingData);
     } else if (cmd[0] === '--count' || cmd[0] === 'count') {
-        count()
+        let countsResult = count(workingData);
+        console.log(countsResult);
     } else {
         console.log('Wrong arguments')
     }
