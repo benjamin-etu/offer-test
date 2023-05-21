@@ -86,19 +86,10 @@ try {
         }
     });
 
-    if (countIsPresent && filterIsPresent){
-        workingData = filter(filterPattern);
-        let counts = count(workingData);
-        console.log(counts);
-    } else if (filterIsPresent){
-        workingData = filter(filterPattern);
-        console.log(workingData);
-    } else if (countIsPresent){
-        let counts = count(workingData);
-        console.log(counts);
-    } else {
-        console.log('Wrong arguments');
-    }
+    workingData = filterIsPresent ? filter(filterPattern) : workingData;
+    workingData = countIsPresent ? count(workingData) : workingData;
+
+    console.log(workingData || 'Wrong arguments');
 
 } catch(err) {
     throw err
