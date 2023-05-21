@@ -61,21 +61,45 @@ const count = (data) => {
     return JSON.stringify(newList)
 }
 
+
 // USAGE: node app.js --filter=[PATTERN] OR node app.js filter=[PATTERN]
 // USAGE: node app.js --count OR node app.js count
 
 try {
-    const cmd = args[2].split("=");
+    
+    // Boolean to check which parameter is present
+    let countIsPresent = false;
+    let filterIsPresent = false;
+
     let workingData = JSON.stringify(data);
-    if (cmd[0] === '--filter' || cmd[0] === 'filter') {
-        workingData = filter(cmd[1]);
+
+    // Save the pattern for filter
+    let filterPattern = null;
+
+    // Search for present args by looping in args array
+    args.forEach((arg) => {
+        if (arg === '--count' || arg === 'count') {
+        countIsPresent = true;
+        } else if (arg.startsWith('--filter=') || arg.startsWith('filter=')) {
+            filterPattern = arg.split('=')[1];
+            filterIsPresent = true;
+        }
+    });
+
+    if (countIsPresent && filterIsPresent){
+        workingData = filter(filterPattern);
+        let counts = count(workingData);
+        console.log(counts);
+    } else if (filterIsPresent){
+        workingData = filter(filterPattern);
         console.log(workingData);
-    } else if (cmd[0] === '--count' || cmd[0] === 'count') {
-        let countsResult = count(workingData);
-        console.log(countsResult);
+    } else if (countIsPresent){
+        let counts = count(workingData);
+        console.log(counts);
     } else {
-        console.log('Wrong arguments')
+        console.log('Wrong arguments');
     }
+
 } catch(err) {
     throw err
 }
