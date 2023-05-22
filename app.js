@@ -4,8 +4,17 @@ const data = require('./data');
 
 const args = process.argv
 
+/**
+ * 
+ * @param {Array} arr - An array
+ * @returns {true} if arr is not an array or is an empty array
+ * @returns {false} if arr is not empty
+ */
 function isEmpty(arr) {
-    return (Array.isArray(arr) && arr.length)
+    if (!Array.isArray(arr)){
+        return false;
+    }
+    return (arr.length <= 0);
 }
 
 // This function filters out every animal that does not match the string pattern
@@ -30,15 +39,15 @@ const filter = (searchedStr) => {
             newPerson.animals = removeNonMatching(searchedStr, p)
 
             // The 'animals' entry will be removed if there is nothing left inside
-            return isEmpty(newPerson.animals)
+            return !isEmpty(newPerson.animals)
         })
 
         // The 'people' entry will be removed if there is nothing left inside
-        return (isEmpty(newCountry.people))
+        return (!isEmpty(newCountry.people))
     });
 
     // prints out the filtered list if there is any match
-    return (!isEmpty(newList)) ? 'Nothing found' : JSON.stringify(newList)
+    return (isEmpty(newList)) ? 'Nothing found' : JSON.stringify(newList)
 }
 
 /**
@@ -97,5 +106,5 @@ try {
 
 
 module.exports = {
-    count, filter
+    count, filter, isEmpty
 }
