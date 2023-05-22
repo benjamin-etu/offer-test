@@ -75,4 +75,119 @@ describe('filter test', () => {
         // If the filter does his works correctly, no unwanted people has to be found. 
         expect(anUnwantedPeopleHasBeenFound).toEqual(false);
     });
+
+    it('should keep intact the order of countries', () =>{
+        let initialOrderOfCountries = [];
+        // Get the initial order of countries
+        data.forEach(country => {
+            initialOrderOfCountries.push(country.name);
+        });
+
+        // Call filter, the string pattern must returns some values 
+        const filteredList = JSON.parse(filter('ab'));
+
+        // Get order of countries in filteredList
+        filteredListCountriesOrder = [];
+        filteredList.forEach(country => {
+            filteredList.push(country.name);
+        });
+
+        // Now, verify that orders are the same
+        let isOrderCorrect = true;
+        // Last index found
+        let lastIndex = -1;
+        filteredListCountriesOrder.forEach(countryName => {
+            const index = initialOrderOfCountries.indexOf(countryName);
+
+            // If country not found or have an index < lastIndex, then the order is not respected 
+            if (index === -1 || index <= lastIndex){
+                isOrderCorrect = false;
+                return;
+            }
+
+            // If country is found and order is correct for now,
+            lastIndex = index;
+        });
+        
+        // Finally, test isOrderCorrect == true
+        expect(isOrderCorrect).toEqual(true);
+
+
+    });
+
+    it('should keep intact the order of people', () =>{
+        let initialOrderOfPeople = [];
+        // Get the initial order of people
+        data.forEach(country => {
+            country.people.forEach(people => {
+                initialOrderOfPeople.push(people.name);
+            });
+        });
+
+        // Call filter, the string pattern must returns some values 
+        const filteredList = JSON.parse(filter('ab'));
+
+        // Get order of people in filteredList
+        filteredListPeoplesOrder = [];
+        filteredList.forEach(country => {
+            country.people.forEach(people => {
+                filteredListPeoplesOrder.push(people.name);
+            });
+        });
+
+        // Now, verify that orders are the same
+        let isOrderCorrect = true;
+        // Last index found
+        let lastIndex = -1;
+        filteredListPeoplesOrder.forEach(people => {
+            const index = initialOrderOfPeople.indexOf(people);
+
+            // If people not found or have an index < lastIndex, then the order is not respected 
+            if (index === -1 || index <= lastIndex){
+                isOrderCorrect = false;
+                return;
+            }
+
+            // If people is found and order is correct for now,
+            lastIndex = index;
+        });
+
+        expect(isOrderCorrect).toEqual(true);
+
+    });
+
+    it('should keep intact the order of animals', () =>{
+
+        const stringPattern = 'ab';
+
+        // Expected order after filter 'ab'
+        const expectedOrder = [
+            'Aldabra Tortoise',
+            'Aldabra Tortoise',
+            'Rabbit',
+            'Baby Doll Sheep',
+            'Rabbits',
+            'Rabbit',
+            'Rabbit',
+            'Rabbit',
+        ];
+
+        const filteredList = JSON.parse(filter(stringPattern));
+
+        // Get order of animals in filteredList
+        filteredListAnimalsOrder = [];
+        filteredList.forEach(country => {
+            country.people.forEach(people => {
+                people.animals.forEach(animal => {
+                    filteredListAnimalsOrder.push(animal.name);
+                });
+            });
+        });
+
+        const sameOrder = (JSON.stringify(expectedOrder) === JSON.stringify(filteredListAnimalsOrder));
+
+        expect(sameOrder).toEqual(true);
+
+        
+    });
 });
